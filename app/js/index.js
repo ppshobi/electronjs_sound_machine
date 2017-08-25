@@ -1,9 +1,42 @@
 'use strict';
 
 var ipc = require('electron').ipcRenderer;
+var menu = require('electron').remote.Menu;
+var tray = require('electron').remote.Tray;
+var path = require('path');
 
 var closeEl = document.querySelector('.close');
 var settingsEl = document.querySelector('.settings');
+var trayIcon = null;
+
+if (process.platform === 'darwin') {
+    trayIcon = new tray(path.join(__dirname, 'img/tray-iconTemplate.png'));
+}
+else {
+    trayIcon = new tray(path.join(__dirname, 'img/tray-icon-alt.png'));
+}
+
+var trayMenuTemplate = [
+    {
+        label: 'Sound machine',
+        enabled: false
+    },
+    {
+        label: 'Settings',
+        click: function () {
+            ipc.send('open-settings-window');
+        }
+    },
+    {
+        label: 'Quit',
+        click: function () {
+            ipc.send('close-main-window');
+        }
+    }
+];
+
+var trayMenu = menu.buildFromTemplate(trayMenuTemplate);
+trayIcon.setContextMenu(trayMenu);
 
 closeEl.addEventListener('click', function () {
     ipc.send('close-main-window');
