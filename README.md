@@ -1,6 +1,6 @@
-#Installation
+## Installation
 
-###clone this repo
+### clone this repo
 
 `cd repo`
 
