@@ -7,9 +7,15 @@ var globalShortcut = require('electron').globalShortcut;
 
 var mainWindow = null;
 var settingsWindow = null;
+var config = require('./configuration');
 
 app.on('ready', function() {
-    var mainWindow = new BrowserWindow({
+
+    if (!config.readSettings('shortcutKeys')) {
+        config.saveSettings('shortcutKeys', ['ctrl', 'shift']);
+    }
+
+    mainWindow = new BrowserWindow({
         height: 700,
         width: 368,
         frame:false,
@@ -17,15 +23,25 @@ app.on('ready', function() {
     });
 
     mainWindow.loadURL('file://' + __dirname + '/app/index.html');
-
-    globalShortcut.register('ctrl+shift+0', () => {
-        mainWindow.webContents.send('globalShortcut', 0);
-    });
-    globalShortcut.register('ctrl+shift+1', () => {
-        mainWindow.webContents.send('globalShortcut', 1);
-    });
+    setGlobalShortcuts();
     
 });
+
+function setGlobalShortcuts() {
+    globalShortcut.unregisterAll();
+
+    var shortcutKeysSetting = config.readSettings('shortcutKeys');
+    var shortcutPrefix = shortcutKeysSetting.length === 0 ? '' : shortcutKeysSetting.join('+') + '+';
+
+    globalShortcut.register(shortcutPrefix + '0', function () {
+        mainWindow.webContents.send('globalShortcut', 0);
+    });
+    globalShortcut.register(shortcutPrefix + '1', function () {
+        mainWindow.webContents.send('globalShortcut', 1);
+    });
+}
+
+
 
 ipc.on('open-settings-window', function () {
     if (settingsWindow) {
