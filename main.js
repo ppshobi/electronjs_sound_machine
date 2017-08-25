@@ -17,6 +17,9 @@ app.on('ready', function() {
 
     mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 
+    globalShortcut.register('ctrl+shift+0', () => {
+        mainWindow.webContents.send('globalShortcut', 0);
+    });
     globalShortcut.register('ctrl+shift+1', () => {
         mainWindow.webContents.send('globalShortcut', 1);
     });
