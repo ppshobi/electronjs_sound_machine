@@ -7,8 +7,10 @@ var mainWindow = null;
 
 app.on('ready', function() {
     mainWindow = new BrowserWindow({
-        height: 600,
-        width: 800
+        height: 700,
+        width: 368,
+        frame:false,
+        resizable:false,
     });
 
     mainWindow.loadURL('file://' + __dirname + '/app/index.html');
