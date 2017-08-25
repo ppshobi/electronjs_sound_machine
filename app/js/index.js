@@ -27,4 +27,10 @@ function prepareButton(buttonEl, soundName) {
     });
 }
 
+ipc.on('globalShortcut', function (event, arg) {
+    var click = new MouseEvent('click');
+    console.log(arg);
+    soundButtons[arg].dispatchEvent(click);
+});
+
 
