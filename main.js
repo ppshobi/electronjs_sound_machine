@@ -72,3 +72,7 @@ ipc.on('close-settings-window', function () {
 ipc.on('close-main-window', () => {
     app.quit();
 });
+
+ipc.on('set-global-shortcuts', function () {
+    setGlobalShortcuts();
+});
