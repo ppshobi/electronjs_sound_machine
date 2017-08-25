@@ -3,9 +3,14 @@
 var ipc = require('electron').ipcRenderer;
 
 var closeEl = document.querySelector('.close');
+var settingsEl = document.querySelector('.settings');
 
 closeEl.addEventListener('click', function () {
     ipc.send('close-main-window');
+});
+
+settingsEl.addEventListener('click', function () {
+    ipc.send('open-settings-window');
 });
 
 var soundButtons = document.querySelectorAll('.button-sound');
@@ -31,6 +36,13 @@ ipc.on('globalShortcut', function (event, arg) {
     var click = new MouseEvent('click');
     console.log(arg);
     soundButtons[arg].dispatchEvent(click);
+});
+
+
+ipc.on('close-settings-window', function () {
+    if (settingsWindow) {
+        settingsWindow.close();
+    }
 });
 
 
